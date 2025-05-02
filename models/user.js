@@ -9,9 +9,14 @@ const userSchema = new mongoose.Schema({
         enum: ['user', 'recruiter', 'admin'],
         default: 'user'
     },
-    profilePicture: String,
-    resume: String,
-    isBlocked: Boolean,
+    profilePicture: {
+        type: String,
+        default: ""
+    },
+    resume: {
+        type: String,
+        default: ""
+    }
 }, {
     timestamps: true,
 });
