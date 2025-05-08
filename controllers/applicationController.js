@@ -6,7 +6,7 @@ const applicationController = {
         try {
             const { jobId } = req.params;
 
-            const { userId } = req.user;
+            const userId = req.userId;
 
             const newApplication = new Application({
                 jobId,
@@ -14,6 +14,22 @@ const applicationController = {
             });
 
             const savedApplication = await newApplication.save();
+
+            // if the userId is already in the job's applicants array, return an error
+            const job = await Job.findById(jobId);
+
+            if (job.applicants.includes(userId)) {
+                return res.status(400).json({
+                    message: 'You have already applied for this job'
+                });
+            }
+
+            // push the userId to the job's applicants array
+            await Job.findByIdAndUpdate(jobId, {
+                $addToSet: { applicants: userId }
+            }, {
+                new: true
+            });
 
             return res.status(201).json({
                 message: 'Job application successful'

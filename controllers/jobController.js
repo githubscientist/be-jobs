@@ -1,10 +1,12 @@
+const Job = require('../models/job');
+
 const jobController = {
     createJob: async (req, res) => {
         try {
             const { title, description, companyId } = req.body;
 
-            if (!title || !description) {
-                return res.status(400).json({ message: 'Title and description are required' });
+            if (!title || !description || !companyId) {
+                return res.status(400).json({ message: 'Title, description, companyId are required' });
             }
 
             const newJob = new Job({
